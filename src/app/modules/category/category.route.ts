@@ -37,3 +37,5 @@ router.delete(
     auth('admin', "user"),
     CategoryController.deleteCategory
 )
+
+export const CategoryRoute = router;

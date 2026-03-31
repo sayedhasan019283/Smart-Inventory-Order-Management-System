@@ -10,6 +10,7 @@ export interface IProduct {
   minStockThreshold: number;
   status: TProductStatus;
   description?: string;
+  productImage: string;
   createdBy: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;

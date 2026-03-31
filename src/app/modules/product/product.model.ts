@@ -14,6 +14,10 @@ const productSchema = new Schema<IProductDocument>(
       ref: 'Category',
       required: [true, 'Category is required'],
     },
+    productImage: {
+      type: String,
+      default : '',
+    },
     price: {
       type: Number,
       required: [true, 'Price is required'],
@@ -63,5 +67,5 @@ productSchema.index({ name: 'text' });
 productSchema.index({ category: 1, status: 1 });
 productSchema.index({ stockQuantity: 1 });
 
-const Product = model<IProductDocument>('Product', productSchema);
-export default Product;
+const ProductModel = model<IProductDocument>('Product', productSchema);
+export default ProductModel;
