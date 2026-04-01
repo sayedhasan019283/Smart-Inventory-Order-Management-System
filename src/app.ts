@@ -50,7 +50,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/test', (req: Request, res: Response) => {
   res.status(201).json({ message: 'Welcome to Backend Template Server' });
 });
-app.get('/', (req, res) => {
+app.get('/', (req : Request, res : Response) => {
   res.status(200).json({ message: 'Server is running!' });
 });
 // global error handle
