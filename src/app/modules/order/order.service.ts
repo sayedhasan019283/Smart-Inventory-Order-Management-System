@@ -4,6 +4,7 @@ import OrderModel from './order.model';
 import ActivityLogModel from '../activityLog/activityLog.model';
 import { TCreateOrder, TUpdateOrderStatus } from './order.validation';
 import AppError from '../../../errors/AppError';
+import RestockQueueModel from '../restockQueue/restockQueue.model';
 
 // ─── helpers ──────────────────────────────────────────────
 
