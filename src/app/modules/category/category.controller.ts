@@ -6,9 +6,9 @@ import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user._id as Types.ObjectId;
+  const userId = req.user.id as Types.ObjectId;
   const result = await CategoryService.createCategoryIntoDB(req.body, userId);
-
+  console.log('hear', userId);
   sendResponse(res, {
     code: StatusCodes.CREATED,
     message: 'Category created successfully',
@@ -18,13 +18,13 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
 
 const getAllCategories = catchAsync(async (req: Request, res: Response) => {
   const result = await CategoryService.getAllCategoriesFromDB(
-    req.query as Record<string, string>
+    req.query as Record<string, string>,
   );
 
   sendResponse(res, {
     code: StatusCodes.OK,
     message: 'Categories retrieved successfully',
-    data: result
+    data: result,
   });
 });
 
@@ -39,11 +39,11 @@ const getSingleCategory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user._id as Types.ObjectId;
+  const userId = req.user.id as Types.ObjectId;
   const result = await CategoryService.updateCategoryIntoDB(
     req.params.id,
     req.body,
-    userId
+    userId,
   );
 
   sendResponse(res, {

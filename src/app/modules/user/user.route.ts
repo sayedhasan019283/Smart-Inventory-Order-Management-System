@@ -98,10 +98,6 @@ router
       name: "profileImage",
       maxCount: 1
     },
-    {
-      name: "CV",
-      maxCount:1
-    },
     ]),
     convertHeicToPngMiddleware(UPLOADS_FOLDER),
     validateRequest(UserValidation.createUserValidationSchema),
@@ -271,7 +267,11 @@ router.post(
  *       401:
  *         description: Unauthorized.
  */
-router.get('/profile',auth(USER_ROLE.user, USER_ROLE.admin, USER_ROLE.superAdmin, USER_ROLE.analyst), UserController.getMyProfile);
+router.get(
+  '/profile',
+  auth(USER_ROLE.user, USER_ROLE.admin, USER_ROLE.superAdmin, USER_ROLE.analyst),
+   UserController.getMyProfile
+  );
 
 /**
  * @swagger

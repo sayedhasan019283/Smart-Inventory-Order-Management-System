@@ -15,9 +15,6 @@ const createUserToDB = async (
   if (files?.profileImage?.[0]) {
     payload.profileImage = `/uploads/users/${files.profileImage[0].filename}`;
   }
-  if (files?.CV?.[0]) {
-    payload.CV = `/uploads/users/${files.CV[0].filename}`;
-  }
 
   // user exist check
   const isUserExist = await User.findOne({ email: payload.email });

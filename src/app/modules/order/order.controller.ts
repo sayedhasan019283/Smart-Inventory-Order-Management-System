@@ -6,7 +6,7 @@ import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user._id as Types.ObjectId;
+  const userId = req.user.id as Types.ObjectId;
   const result = await OrderService.createOrderIntoDB(req.body, userId);
 
   sendResponse(res, {
@@ -17,7 +17,9 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllOrders = catchAsync(async (req: Request, res: Response) => {
-  const result = await OrderService.getAllOrdersFromDB(req.query as Record<string, string>);
+  const result = await OrderService.getAllOrdersFromDB(
+    req.query as Record<string, string>,
+  );
 
   sendResponse(res, {
     code: StatusCodes.OK,
@@ -37,11 +39,11 @@ const getSingleOrder = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user._id as Types.ObjectId;
+  const userId = req.user.id as Types.ObjectId;
   const result = await OrderService.updateOrderStatusIntoDB(
     req.params.id,
     req.body,
-    userId
+    userId,
   );
 
   sendResponse(res, {
@@ -52,7 +54,7 @@ const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteOrder = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user._id as Types.ObjectId;
+  const userId = req.user.id as Types.ObjectId;
   const result = await OrderService.deleteOrderFromDB(req.params.id, userId);
 
   sendResponse(res, {

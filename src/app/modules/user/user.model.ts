@@ -58,7 +58,7 @@ const userSchema = new Schema<TUser, UserModal>(
     },
     role: {
       type: String,
-      enum: ["admin", "superAdmin", "analyst", "user"],
+      enum: ["admin", "user"],
       default: "user"
     },
     isHumanTrue: {
