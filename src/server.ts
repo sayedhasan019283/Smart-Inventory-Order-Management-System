@@ -20,9 +20,9 @@ async function main() {
     
     const port = typeof config.port === 'number' ? config.port : Number(config.port);
     // '0.0.0.0'
-    server = app.listen(port, '0.0.0.0', () => {
+    server = app.listen(port, config.backendIp, () => {
       logger.info(
-        colors.yellow(`♻️  Application listening on port http://'0.0.0.0':${port}/test`)
+        colors.yellow(`♻️  Application listening on port http://${config.backendIp}:${port}/test`)
       );
     });
 
