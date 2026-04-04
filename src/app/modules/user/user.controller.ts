@@ -263,13 +263,9 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const files = req.files as {
       profileImage?: { filename: string }[];
-      CV?: { filename: string }[];
     };
     if (files?.profileImage && files.profileImage[0]?.filename) {
       payload.profileImage = `/uploads/users/${files.profileImage[0].filename}`;
-    }
-    if (files?.CV && files.CV[0]?.filename) {
-      payload.CV = `/uploads/users/${files.CV[0].filename}`;
     }
   const result = await UserService.updateMyProfile(userId, payload);
   return sendResponse(res, {

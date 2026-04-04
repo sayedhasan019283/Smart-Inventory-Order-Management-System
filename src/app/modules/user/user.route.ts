@@ -315,11 +315,7 @@ router.patch(
       {
       name: "profileImage",
       maxCount: 1
-    },
-    {
-      name: "CV",
-      maxCount:1
-    },
+    }
     ]),
   convertHeicToPngMiddleware(UPLOADS_FOLDER),
   UserController.updateMyProfile
