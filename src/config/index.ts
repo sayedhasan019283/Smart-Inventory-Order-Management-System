@@ -48,13 +48,16 @@ const envVarsSchema = z.object({
       required_error: 'BCRYPT_SALT_ROUNDS is required',
     })
     .default('12'),
+  REDIS_HOST: z.string().default('localhost'),
+  REDIS_PORT: z.string().default('6379'),
+  REDIS_PASSWORD: z.string().optional(),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.string().optional(),
   SMTP_USERNAME: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
   BACKEND_IP: z.string().optional(),
-  LOCAL_SERVER:z.string().optional(),
+  LOCAL_SERVER: z.string().optional(),
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 });
@@ -84,6 +87,11 @@ export default {
   bcrypt: {
     saltRounds: envVars.data.BCRYPT_SALT_ROUNDS,
   },
+  redis: {
+    host: envVars.data.REDIS_HOST,
+    port: Number(envVars.data.REDIS_PORT),
+    password: envVars.data.REDIS_PASSWORD,
+  },
   email: {
     smtp: {
       host: envVars.data.SMTP_HOST,
@@ -96,7 +104,7 @@ export default {
     from: envVars.data.EMAIL_FROM,
   },
   backendIp: envVars.data.BACKEND_IP || 'localhost',
-  localServer : envVars.data.LOCAL_SERVER,
+  localServer: envVars.data.LOCAL_SERVER,
   stripe: {
     secretKey: envVars.data.STRIPE_SECRET_KEY,
     webhookSecret: envVars.data.STRIPE_WEBHOOK_SECRET,

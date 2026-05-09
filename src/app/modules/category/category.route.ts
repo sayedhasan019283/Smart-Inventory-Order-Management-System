@@ -24,7 +24,7 @@ router.get(
 
 router.get(
   '/get-single-category/:id',
-  auth('admin', 'user'),
+  // auth('admin', 'user'),
   CategoryController.getSingleCategory
 );
 

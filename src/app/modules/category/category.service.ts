@@ -3,6 +3,7 @@ import CategoryModel from './category.model';
 import { TCreateCategory, TUpdateCategory } from './category.validation';
 import AppError from '../../../errors/AppError';
 import { createActivityLog } from '../activityLog/activityLog.service';
+import { getRedis, setRedis } from '../../../utils/redisClient';
 
 const createCategoryIntoDB = async (
   payload: TCreateCategory,
@@ -61,11 +62,18 @@ const getAllCategoriesFromDB = async (query: {
 };
 
 const getSingleCategoryFromDB = async (id: string) => {
+  const cached = await getRedis(`category:${id}`);
+  if (cached) {
+    console.log("get from cached")
+    return JSON.parse(cached);
+  }
+
   const category = await CategoryModel.findById(id).populate(
     'createdBy',
     'name email'
   );
   if (!category) throw new AppError(404, 'Category not found');
+  await setRedis(`category:${id}`, JSON.stringify(category), 3600); // 1 hour cache
   return category;
 };
 

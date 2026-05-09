@@ -1,9 +1,12 @@
 /* instrumentation.mjs */
-import { NodeSDK } from '@opentelemetry/sdk-node'
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
-import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base'
-import { resourceFromAttributes } from '@opentelemetry/resources'
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import {
+  ConsoleSpanExporter,
+  SimpleSpanProcessor,
+} from '@opentelemetry/sdk-trace-base';
+import { resourceFromAttributes } from '@opentelemetry/resources';
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({
@@ -19,9 +22,9 @@ const sdk = new NodeSDK({
   ],
 
   spanProcessor: new SimpleSpanProcessor(new ConsoleSpanExporter()),
-})
+});
 
-sdk.start()
+sdk.start();
 
 import colors from 'colors';
 import mongoose from 'mongoose';
@@ -30,8 +33,7 @@ import app from './app';
 import config from './config';
 import { errorLogger, logger } from './shared/logger';
 import { socketHelper } from './app/socket/socket';
-
-
+import { connectRedis } from './utils/redisClient';
 
 process.on('uncaughtException', error => {
   errorLogger.error('Unhandled Exception Detected', error);
@@ -44,12 +46,18 @@ async function main() {
   try {
     mongoose.connect(config.mongoose.url as string);
     logger.info(colors.green('🚀 Database connected successfully'));
-    
-    const port = typeof config.port === 'number' ? config.port : Number(config.port);
+
+    await connectRedis();
+    logger.info(colors.green('🔴 Redis connected successfully'));
+
+    const port =
+      typeof config.port === 'number' ? config.port : Number(config.port);
     // '0.0.0.0'
-    server = app.listen(port, '0.0.0.0', () => {
+    server = app.listen(port, config.backendIp, () => {
       logger.info(
-        colors.yellow(`♻️  Application listening on port http://'0.0.0.0':${port}/test`)
+        colors.yellow(
+          `♻️  Application listening on port http://${config.backendIp}:${port}/test`,
+        ),
       );
     });
 
@@ -62,7 +70,6 @@ async function main() {
     socketHelper.socket(io);
     // @ts-ignore
     global.io = io;
-
   } catch (error) {
     errorLogger.error(colors.red('🤢 Failed to connect Database'));
   }

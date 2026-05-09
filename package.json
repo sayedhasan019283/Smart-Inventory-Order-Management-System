@@ -69,6 +69,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.16",
     "npm": "^10.9.2",
+    "redis": "^5.12.1",
     "socket.io": "^4.8.1",
     "stripe": "^17.4.0",
     "swagger-jsdoc": "^6.2.8",
