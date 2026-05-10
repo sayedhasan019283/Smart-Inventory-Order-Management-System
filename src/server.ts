@@ -47,8 +47,8 @@ async function main() {
     mongoose.connect(config.mongoose.url as string);
     logger.info(colors.green('🚀 Database connected successfully'));
 
-    await connectRedis();
-    logger.info(colors.green('🔴 Redis connected successfully'));
+    // await connectRedis();
+    // logger.info(colors.green('🔴 Redis connected successfully'));
 
     const port =
       typeof config.port === 'number' ? config.port : Number(config.port);
