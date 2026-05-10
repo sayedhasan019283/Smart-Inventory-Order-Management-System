@@ -1,24 +1,32 @@
-server:
-  http_listen_port: 4318
-  grpc_listen_port: 4317
-  log_level: info
-
-receivers:
-  otlp:
-    protocols:
-      grpc: {}
-      http: {}
+﻿server:
+  http_listen_port: 3100
 
 distributor:
-  receivers: [otlp]
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
 
 ingester:
-  wal:
-    enabled: true
-    dir: /var/tempo/wal
+  trace_idle_period: 10s
+  max_block_duration: 5m
+
+compactor:
+  compaction:
+    block_retention: 1h
 
 storage:
   trace:
     backend: local
     local:
       path: /var/tempo/traces
+    wal:
+      path: /var/tempo/wal
+
+query_frontend:
+  search:
+    duration_slo: 5s
+    throughput_bytes_slo: 1.073741824e+09

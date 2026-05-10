@@ -11,9 +11,14 @@ services:
       - .env
     environment:
       - NODE_ENV=development
+      - REDIS_HOST=redis
+      - TEMPO_OTLP_HTTP=http://tempo:4318
+      - TEMPO_OTLP_GRPC=http://tempo:4317
+      - BACKEND_IP=0.0.0.0
     depends_on:
       - mongo
       - redis
+      - tempo
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -42,7 +47,7 @@ services:
       - app-network
 
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:2.3.0
     restart: unless-stopped
     ports:
       - '4317:4317'
@@ -51,7 +56,7 @@ services:
     volumes:
       - ./tempo/tempo-local.yaml:/etc/tempo/tempo-local.yaml
       - tempo_data:/var/tempo
-    command: ['--config.file=/etc/tempo/tempo-local.yaml']
+    command: ['-config.file=/etc/tempo/tempo-local.yaml']
     networks:
       - app-network
 
@@ -60,8 +65,6 @@ services:
     restart: unless-stopped
     ports:
       - '3000:3000'
-    env_file:
-      - .env
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin

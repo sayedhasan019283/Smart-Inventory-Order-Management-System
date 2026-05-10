@@ -41,6 +41,7 @@
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@opentelemetry/auto-instrumentations-node": "^0.74.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.217.0",
     "@opentelemetry/instrumentation-mongodb": "^0.69.0",
     "@opentelemetry/sdk-node": "^0.216.0",
     "@opentelemetry/sdk-trace-base": "^2.7.1",

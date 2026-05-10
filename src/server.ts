@@ -2,11 +2,16 @@
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import {
-  ConsoleSpanExporter,
-  SimpleSpanProcessor,
+  BatchSpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+
+const tempoUrl = process.env.TEMPO_OTLP_HTTP
+  ? process.env.TEMPO_OTLP_HTTP.replace(/\/+$/g, '')
+  : 'http://tempo:4318';
+const otlpUrl = `${tempoUrl}/v1/traces`;
 
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({
@@ -21,7 +26,9 @@ const sdk = new NodeSDK({
     }),
   ],
 
-  spanProcessor: new SimpleSpanProcessor(new ConsoleSpanExporter()),
+  spanProcessor: new BatchSpanProcessor(
+    new OTLPTraceExporter({ url: otlpUrl }),
+  ),
 });
 
 sdk.start();
@@ -47,17 +54,17 @@ async function main() {
     mongoose.connect(config.mongoose.url as string);
     logger.info(colors.green('🚀 Database connected successfully'));
 
-    // await connectRedis();
-    // logger.info(colors.green('🔴 Redis connected successfully'));
+    await connectRedis();
+    logger.info(colors.green('🔴 Redis connected successfully'));
 
     const port =
       typeof config.port === 'number' ? config.port : Number(config.port);
     // '0.0.0.0'
     // ${config.backendIp}
-    server = app.listen(port, '0.0.0.0', () => {
+    server = app.listen(port, config.backendIp, () => {
       logger.info(
         colors.yellow(
-          `♻️  Application listening on port http://'0.0.0.0':${port}/test`,
+          `♻️  Application listening on port http://${config.backendIp}:${port}/test`,
         ),
       );
     });
