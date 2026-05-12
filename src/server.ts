@@ -53,7 +53,7 @@ async function main() {
   try {
     mongoose.connect(config.mongoose.url as string);
     logger.info(colors.green('🚀 Database connected successfully'));
-
+    // redis connection
     await connectRedis();
     logger.info(colors.green('🔴 Redis connected successfully'));
 

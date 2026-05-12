@@ -23,7 +23,7 @@ const myFormat = printf(
     return `${date.toDateString()} ${hour}:${minutes}:${seconds} [${label}] ${level}: ${message}`;
   }
 );
-
+// logger for success and error both
 const logger = createLogger({
   level: 'info',
   format: combine(label({ label: 'SERVER-NAME' }), timestamp(), myFormat),
